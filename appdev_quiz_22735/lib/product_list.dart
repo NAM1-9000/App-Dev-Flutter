@@ -49,34 +49,35 @@ class _ProductListState extends State<ProductList> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return SizedBox(
-          width: double.maxFinite,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('ID: ${user.id}'),
-                Text('Brand: ${user.brand}'),
-                Text('Name: ${user.name}'),
-                Text('Price: ${user.price}'),
-                Image.network("${user.imageLink}"),
-                Text('Image Link: ${user.imageLink}'),
-                Text('Product Link: ${user.productLink}'),
-                Text('Website Link: ${user.websiteLink}'),
-                Text('Description: ${user.description}'),
-                Text('Rating: ${user.rating}'),
-                Text('Product Type: ${user.productType}'),
-                Text('Created At: ${user.createdAt}'),
-                Text('Updated At: ${user.updatedAt}'),
-                Text('Product API URL: ${user.productApiUrl}'),
-                Text('API Featured Image: ${user.apiFeaturedImage}'),
-                Text('Product Colors: ${user.productColors}'),
-                // Add more fields as needed
-              ],
-            ),
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Image.network(
+                    "${user.imageLink}",
+                    scale: 2,
+                  ),
+                  Text('${user.name}\n'),
+                  Text('${user.description}'),
+                ],
+              ),
+              Row(
+                children: [
+                  Text('Brand: ${user.brand}'),
+                  Text('Price: ${user.price}'),
+                ],
+              ),
+              Row(
+                children: [
+                  Text('Product Type: ${user.productType}'),
+                  Text('Rating: ${user.rating}'),
+                ],
+              ),
+              Text('${user.productColors}'),
+            ],
           ),
         );
       },
