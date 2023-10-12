@@ -65,7 +65,7 @@ class _ProductListState extends State<ProductList> {
                       children: [
                         Text(
                           '${user.name}\n',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 12),
                         ),
                         Text('${user.description}'),
