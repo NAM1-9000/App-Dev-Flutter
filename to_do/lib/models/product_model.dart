@@ -1,4 +1,4 @@
-class APIDataModel {
+class Product {
   int? id;
   String? brand;
   String? name;
@@ -15,24 +15,25 @@ class APIDataModel {
   String? apiFeaturedImage;
   List<ProductColors>? productColors;
 
-  APIDataModel(
-      {this.id,
-      this.brand,
-      this.name,
-      this.price,
-      this.imageLink,
-      this.productLink,
-      this.websiteLink,
-      this.description,
-      this.rating,
-      this.productType,
-      this.createdAt,
-      this.updatedAt,
-      this.productApiUrl,
-      this.apiFeaturedImage,
-      this.productColors});
+  Product({
+    this.id,
+    this.brand,
+    this.name,
+    this.price,
+    this.imageLink,
+    this.productLink,
+    this.websiteLink,
+    this.description,
+    this.rating,
+    this.productType,
+    this.createdAt,
+    this.updatedAt,
+    this.productApiUrl,
+    this.apiFeaturedImage,
+    this.productColors,
+  });
 
-  APIDataModel.fromJson(Map<String, dynamic> json) {
+  Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     brand = json['brand'];
     name = json['name'];
@@ -50,13 +51,13 @@ class APIDataModel {
     if (json['product_colors'] != null) {
       productColors = <ProductColors>[];
       json['product_colors'].forEach((v) {
-        productColors!.add(ProductColors.fromJson(v));
+        productColors!.add(new ProductColors.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = id;
     data['brand'] = brand;
     data['name'] = name;
@@ -67,8 +68,8 @@ class APIDataModel {
     data['description'] = description;
     data['rating'] = rating;
     data['product_type'] = productType;
-    // if (this.tagList != null) {
-    //   data['tag_list'] = this.tagList!.map((v) => v.toJson()).toList();
+    // if (tagList != null) {
+    //   data['tag_list'] = tagList!.map((v) => v.toJson()).toList();
     // }
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
@@ -93,9 +94,9 @@ class ProductColors {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['hex_value'] = hexValue;
-    data['colour_name'] = colourName;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['hex_value'] = this.hexValue;
+    data['colour_name'] = this.colourName;
     return data;
   }
 }

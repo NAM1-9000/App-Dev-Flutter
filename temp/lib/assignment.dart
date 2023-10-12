@@ -1,85 +1,126 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:temp/model.dart';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:temp/model.dart';
 
-Future<List<APIData>> fetchAlbum() async {
-  final response = await http
-      .get(Uri.parse('https://jsonplaceholder.typicode.com/comments'));
+Future<List<APIDataModel>> fetchAlbum() async {
+  final response = await http.get(Uri.parse(
+      'https://makeup-api.herokuapp.com/api/v1/products.json?brand=maybelline'));
 
   if (response.statusCode == 200) {
     List<dynamic> parsedListJson = jsonDecode(response.body);
 
-    List<APIData> itemsList = List<APIData>.from(
-        parsedListJson.map<APIData>((dynamic i) => APIData.fromJson(i)));
+    List<APIDataModel> itemsList = List<APIDataModel>.from(parsedListJson
+        .map<APIDataModel>((dynamic i) => APIDataModel.fromJson(i)));
     return itemsList;
   } else {
     throw Exception('Failed to load album');
   }
 }
 
-class ListPageAss extends StatefulWidget {
-  const ListPageAss({super.key});
+class ProductList extends StatefulWidget {
+  const ProductList({super.key});
 
   @override
-  State<ListPageAss> createState() => _ListPageAssState();
+  State<ProductList> createState() => _ProductListState();
 }
 
-class _ListPageAssState extends State<ListPageAss> {
+class _ProductListState extends State<ProductList> {
   @override
   void initState() {
     super.initState();
     fetchAlbum();
   }
 
-  Widget _customCard(APIData obj, int num) {
+  Widget _customCard(APIDataModel obj) {
     return Card(
-      child: ListTile(
-        onTap: () => _showModal(context, obj),
-        title: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.blue),
-              child: Center(
-                child: Text(
-                  num.toString(),
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            Expanded(child: Text(obj.name)),
-          ],
+      child: InkWell(
+        child: ListTile(
+          onTap: () => _showUserDetails(context, obj),
+          leading: Image.network("${obj.imageLink}"),
+          title: Text("${obj.name}"),
+          trailing: Text("\$ ${obj.price}"),
         ),
       ),
     );
   }
 
-  void _showModal(BuildContext context, APIData obj) {
-    double totalHeight =
-        (obj.name.length + obj.email.length + obj.body.length) * 1.0;
-
+  void _showUserDetails(BuildContext context, APIDataModel user) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: totalHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Name: ${obj.name}"),
-                Text("Email: ${obj.email}"),
-                Text("Body: ${obj.body}")
-              ],
-            ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Wrap(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.network(
+                    "${user.imageLink}",
+                    scale: 2,
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Text(
+                          '${user.name}\n',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 12),
+                        ),
+                        Text('${user.description}'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween, // Align items at both ends
+                children: [
+                  Text('Brand: ${user.brand}'),
+                  Text('Price: \$ ${user.price}'),
+                ],
+              ),
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween, // Align items at both ends
+                children: [
+                  Text('Product Type: ${user.productType}'),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: 'Rating: ',
+                          style:
+                              TextStyle(color: Colors.black), // Default color
+                        ),
+                        TextSpan(
+                          text: user.rating.toString(),
+                          style: const TextStyle(
+                              color: Colors.red), // Red color for user.rating
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ...user.productColors!.map(
+                    (nigga) {
+                      return CircleAvatar(
+                        backgroundColor: Color(int.parse(
+                                nigga.hexValue!.substring(1, 7),
+                                radix: 16) +
+                            0xFF000000),
+                      );
+                    },
+                  )
+                ],
+              ),
+            ],
           ),
         );
       },
@@ -91,21 +132,33 @@ class _ListPageAssState extends State<ListPageAss> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Text('Comments', style: TextStyle(color: Colors.white)),
+        title: const Text("Products", style: TextStyle(color: Colors.white)),
         centerTitle: true,
+        leading: IconButton(
+            onPressed: () {
+              print("Menu Button");
+            },
+            icon: const Icon(
+              Icons.menu,
+              semanticLabel: "menu",
+              color: Colors.white,
+            )),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: FutureBuilder(
+        child: FutureBuilder<List<APIDataModel>>(
           future: fetchAlbum(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return InkWell(
-                child: ListView.builder(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                  ),
                   itemCount: snapshot.data?.length,
                   itemBuilder: (context, i) {
                     var item = snapshot.data![i];
-                    return _customCard(item, i + 1);
+                    return _customCard(item);
                   },
                 ),
               );
