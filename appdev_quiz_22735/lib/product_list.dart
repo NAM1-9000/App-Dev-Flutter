@@ -49,34 +49,77 @@ class _ProductListState extends State<ProductList> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Wrap(
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.network(
                     "${user.imageLink}",
                     scale: 2,
                   ),
-                  Text('${user.name}\n'),
-                  Text('${user.description}'),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Text(
+                          '${user.name}\n',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 12),
+                        ),
+                        Text('${user.description}'),
+                      ],
+                    ),
+                  ),
                 ],
               ),
               Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween, // Align items at both ends
                 children: [
                   Text('Brand: ${user.brand}'),
-                  Text('Price: ${user.price}'),
+                  Text('Price: \$ ${user.price}'),
                 ],
               ),
               Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween, // Align items at both ends
                 children: [
                   Text('Product Type: ${user.productType}'),
-                  Text('Rating: ${user.rating}'),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: 'Rating: ',
+                          style:
+                              TextStyle(color: Colors.black), // Default color
+                        ),
+                        TextSpan(
+                          text: user.rating.toString(),
+                          style: const TextStyle(
+                              color: Colors.red), // Red color for user.rating
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-              Text('${user.productColors}'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ...user.productColors!.map(
+                    (nigga) {
+                      return CircleAvatar(
+                        backgroundColor: Color(int.parse(
+                                nigga.hexValue!.substring(1, 7),
+                                radix: 16) +
+                            0xFF000000),
+                      );
+                    },
+                  )
+                ],
+              ),
             ],
           ),
         );
@@ -90,6 +133,7 @@ class _ProductListState extends State<ProductList> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text("Products", style: TextStyle(color: Colors.white)),
+        centerTitle: true,
         leading: IconButton(
             onPressed: () {
               print("Menu Button");

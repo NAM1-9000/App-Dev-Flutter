@@ -75,8 +75,7 @@ class APIDataModel {
     data['product_api_url'] = productApiUrl;
     data['api_featured_image'] = apiFeaturedImage;
     if (productColors != null) {
-      data['product_colors'] =
-          productColors!.map((v) => v.toJson()).toList();
+      data['product_colors'] = productColors!.map((v) => v.toJson()).toList();
     }
     return data;
   }

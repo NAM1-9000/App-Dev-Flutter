@@ -1,5 +1,5 @@
-import 'package:assignment1/list_page.dart';
 import 'package:flutter/material.dart';
+import 'package:assignment1/list_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,20 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Assignment#1',
-        themeMode: ThemeMode.system,
-        theme: ThemeData(
-          colorSchemeSeed: Colors.amber,
-          useMaterial3: true,
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.blue[100],
-          ),
-        ),
-        darkTheme: ThemeData(
-            colorSchemeSeed: Colors.amber,
-            useMaterial3: true,
-            brightness: Brightness.dark),
-        home: const UserUi());
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const ListPageAss(),
+    );
   }
 }
