@@ -41,10 +41,12 @@ class _ListPageState extends State<ListPage> {
 
   Widget _customCard(Products obj) {
     return Card(
+      elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),
       ),
       child: InkWell(
+        borderRadius: BorderRadius.circular(50),
         child: Stack(
           children: [
             Image.network(
@@ -103,61 +105,63 @@ class _ListPageState extends State<ListPage> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: obj.images.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.network(
-                        obj.images[index],
-                        width: 200,
-                        fit: BoxFit.cover,
-                      ),
-                    );
-                  },
+        return SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: obj.images.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.network(
+                          obj.images[index],
+                          width: 200,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                obj.title,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-              Text("${obj.description}"),
-              Text("\$ ${obj.price}",
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              Row(
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.star,
-                        color: Colors.yellow,
-                      ),
-                      Text("${obj.rating}"),
-                    ],
-                  ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      Text("${obj.discountPercentage}%"),
-                      const Icon(
-                        Icons.discount,
-                        color: Colors.blue,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                const SizedBox(height: 10),
+                Text(
+                  obj.title,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                Text("${obj.description}"),
+                Text("\$ ${obj.price}",
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                Row(
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.star,
+                          color: Colors.yellow,
+                        ),
+                        Text("${obj.rating}"),
+                      ],
+                    ),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        Text("${obj.discountPercentage}%"),
+                        const Icon(
+                          Icons.discount,
+                          color: Colors.blue,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },
